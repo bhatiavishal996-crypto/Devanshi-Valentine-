@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Devanshi ❤️</title>
+
+<style>
+body {
+margin: 0;
+height: 100vh;
+background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+display: flex;
+align-items: center;
+justify-content: center;
+font-family: 'Segoe UI', sans-serif;
+overflow: hidden;
+}
+
+.card {
+background: white;
+padding: 40px 30px;
+border-radius: 25px;
+text-align: center;
+width: 340px;
+box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+z-index: 2;
+}
+
+h1 {
+color: #ff4d6d;
+margin-bottom: 10px;
+}
+
+p {
+font-size: 18px;
+color: #555;
+margin-bottom: 25px;
+}
+
+/* Buttons row */
+.buttons {
+display: flex;
+justify-content: center;
+gap: 20px;
+position: relative;
+height: 60px;
+}
+
+button {
+padding: 12px 28px;
+font-size: 16px;
+border-radius: 30px;
+border: none;
+cursor: pointer;
+position: relative;
+}
+
+/* YES button (fixed, never moves) */
+#yes {
+background: #ff4d6d;
+color: white;
+animation: bounce 1.6s infinite;
+z-index: 5;
+}
+
+@keyframes bounce {
+0%, 100% { transform: translateY(0); }
+50% { transform: translateY(-6px); }
+}
+
+/* NO button (will move) */
+#no {
+background: #ddd;
+color: #444;
+z-index: 4;
+}
+
+/* Floating hearts */
+.heart {
+position: absolute;
+font-size: 20px;
+animation: floatUp 6s linear infinite;
+opacity: 0.8;
+pointer-events: none;
+}
+
+@keyframes floatUp {
+from {
+transform: translateY(100vh) scale(0.8);
+opacity: 1;
+}
+to {
+transform: translateY(-10vh) scale(1.2);
+opacity: 0;
+}
+}
+
+/* Final screen */
+.final-screen {
+position: fixed;
+inset: 0;
+background: linear-gradient(135deg, #ff758c, #ff7eb3);
+display: flex;
+align-items: center;
+justify-content: center;
+text-align: center;
+color: white;
+padding: 20px;
+z-index: 10;
+}
+
+.final-content {
+max-width: 420px;
+animation: fadeIn 1s ease;
+}
+
+.final-content img {
+width: 100%;
+border-radius: 20px;
+margin: 20px 0;
+}
+
+@keyframes fadeIn {
+from { opacity: 0; transform: scale(0.95); }
+to { opacity: 1; transform: scale(1); }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Light romantic piano music -->
+<audio id="music" loop preload="auto">
+<source src="https://cdn.pixabay.com/audio/2022/11/02/audio_0a3c4c3d7a.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card">
+<h1>Devanshi ❤️</h1>
+<p>Will you be my Valentine this year?</p>
+
+<div class="buttons">
+<button id="yes">Yes 💖</button>
+<button id="no">No 💔</button>
+</div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const music = document.getElementById("music");
+
+let noX = null;
+let noY = null;
+
+/* NO button is afraid of the mouse */
+document.addEventListener("mousemove", (e) => {
+const rect = noBtn.getBoundingClientRect();
+
+if (noX === null) {
+noX = rect.left;
+noY = rect.top;
+}
+
+const centerX = noX + rect.width / 2;
+const centerY = noY + rect.height / 2;
+
+const dx = e.clientX - centerX;
+const dy = e.clientY - centerY;
+const distance = Math.sqrt(dx * dx + dy * dy);
+
+if (distance < 120) {
+noX -= dx * 0.15;
+noY -= dy * 0.15;
+
+noX = Math.max(10, Math.min(window.innerWidth - rect.width - 10, noX));
+noY = Math.max(10, Math.min(window.innerHeight - rect.height - 10, noY));
+
+noBtn.style.position = "fixed";
+noBtn.style.left = noX + "px";
+noBtn.style.top = noY + "px";
+}
+});
+
+/* Floating hearts */
+function createHeart() {
+const heart = document.createElement("div");
+heart.className = "heart";
+heart.innerHTML = "❤️";
+heart.style.left = Math.random() * 100 + "vw";
+heart.style.animationDuration = (Math.random() * 3 + 3) + "s";
+document.body.appendChild(heart);
+setTimeout(() => heart.remove(), 6000);
+}
+
+setInterval(createHeart, 350);
+
+/* YES clicked */
+yesBtn.addEventListener("click", () => {
+music.play();
+
+const sure = confirm("Are you sure you want to be my Valentine? 💕");
+if (!sure) return;
+
+document.body.innerHTML = `
+<div class="final-screen">
+<div class="final-content">
+<h1>Devanshi 😍</h1>
+<p>
+This page was playful,<br>
+but my feelings for you are very real ❤️<br><br>
+Thank you for choosing me,<br>
+for laughing with me,<br>
+and for making my days brighter just by being you.
+</p>
+
+<img src="https://media.giphy.com/media/26FLdmIp6wJr91JAI/giphy.gif" />
+
+<p>
+Happy Valentine’s Day ❤️<br>
+Always yours,<br>
+<strong>Vishal</strong>
+</p>
+</div>
+</div>
+`;
+});
+</script>
+
+</body>
+</html>
